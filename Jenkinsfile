@@ -29,14 +29,16 @@ stages {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing unit test'
 						// sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB;do gradle --no-daemon -p ${i} clean build;done'
-						sh 'mvn -f sample-java-app/pom.xml clean package'
-						sh 'mvn -X javadoc:javadoc -o'
+						//sh 'mvn -f sample-java-app/pom.xml clean package'
+						//sh 'mvn -X javadoc:javadoc -o'
+						cd complete
+						sh './build.gradle'
 					}
 				}
 			}
 		}
 	}
-	stage('Code Quality') {
+	/* stage('Code Quality') {
 		steps {
 			container('gradle') {
 				withMaven(maven: 'MAVEN-3.6.3') {
@@ -67,7 +69,7 @@ stages {
 							sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB   OrderReconESB;do cp -rp ${i}/dist/libs/* $WORKSPACE/artifacts/ ;done' */
 							/* echo 'create a tar file on the Jenkins server'
 							sh "cd $WORKSPACE/artifacts/ && tar -cvzf artifact.tar * && md5sum artifact.tar archiveArtifacts artifacts: 'artifacts/*.tar', fingerprint: true */
-							sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar'
+							/* sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar'
 							sh 'ls -lrt sample-java-app/target/'
 							sh 'mvn -X deploy:deploy-file  -Dfile=sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 							echo "noooooooooooooooooo"
@@ -91,17 +93,18 @@ stages {
 							/* sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "$ESB_BIN_PATH stop || sleep 20"'
 							echo 'force stop any remaining mule process'
 							sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "if [[ $(ps aux | grep /opt/mule/latest/ | grep -vc grep)  > 0 ]]; then "kill -9 $(ps -ef|pgrep -f "/opt/mule/latest/bin")"; else echo "do nothing"; fi"' */
-							echo 'tomcat server stopped'
+							/* echo 'tomcat server stopped'
 							echo 'copying the tar file from jenkins to deployment directory on app and remove the old folders and untarring the new jar and war files'
 							/* sh 'scp -rp $WORKSPACE/artifacts/artifact.tar $DEPLOYMENT_USER@$DEPOYMENT_SERVER:$DEPLOYMENT_STAGE_DIR/'
 							sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "cd $DEPLOYMENT_STAGE_DIR && rm -rf *.war *.jar"'
 							sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "cd $DEPLOYMENT_STAGE_DIR && tar -xvzf artifact.tar && rm -rf *.jar"'
 							sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "cd $DEPLOYMENT_DIR && rm -rf $ESB_WAR_FOLDERS && cp -rp $DEPLOYMENT_STAGE_DIR/*.war $DEPLOYMENT_DIR"' */
-							echo 'Deployment has been completed'
+							/* echo 'Deployment has been completed'
 							echo 'starting the tomcat ESB server'
 							/* sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "$ESB_BIN_PATH start"'
 							sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "sleep 20"' */
-							echo 'tomcat server started'
+							/
+								/* echo 'tomcat server started'
 						}
 					} else {
 						echo "no need"
@@ -111,7 +114,7 @@ stages {
 		}
 }
 	
-	stage('Post Deploy Tests') {
+	/* stage('Post Deploy Tests') {
 		parallel {
 			stage('Smoke Test') {
 				steps {
@@ -151,7 +154,7 @@ stages {
 				exit
 				fi
 				exit */
-			}
+		/*	}
 			stage('Security Test') {
 				steps {
 					echo 'I am running Security Test here'
@@ -160,7 +163,7 @@ stages {
 		}
 	}    
   }
-  post {
+/*  post {
         failure {
             /*mail bcc: '', 
             	 body: "<b>Example</b><br>\n<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
@@ -171,13 +174,13 @@ stages {
             	 replyTo: '', 
             	 subject: "ERROR CI: Project name -> ${env.JOB_NAME}", 
             	 to: "foo@foomail.com";*/
-		echo 'I am sending a notification with failure'
+		/* echo 'I am sending a notification with failure'
         }
 	success {
 		echo 'I am sending a notification with success'
 	}
 	always {
-		javadoc: Publish Javadoc
-	}
+		javadoc: Publish Javadoc */
+	} */
    }
 }
