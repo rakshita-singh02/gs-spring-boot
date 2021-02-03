@@ -31,7 +31,7 @@ stages {
 						// sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB;do gradle --no-daemon -p ${i} clean build;done'
 						//sh 'mvn -f sample-java-app/pom.xml clean package'
 						//sh 'mvn -X javadoc:javadoc -o'
-						cd complete
+						sh 'cd complete'
 						sh './build.gradle'
 					}
 				}
